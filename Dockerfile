@@ -1,0 +1,21 @@
+FROM python:3.9-slim
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar requirements.txt y instalar dependencias
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar el resto del código
+COPY . .
+
+# Exponer el puerto 8080 (default de Cloud Run)
+EXPOSE 8080
+
+# Iniciar la aplicación
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 playground:app
