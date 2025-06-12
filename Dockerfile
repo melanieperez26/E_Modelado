@@ -9,7 +9,8 @@ WORKDIR /app
 
 # Copiar requirements.txt y instalar dependencias
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --index-url https://pypi.agno.com/simple --extra-index-url https://pypi.org/simple agno==0.1.2
 
 # Copiar el resto del código
 COPY . .
