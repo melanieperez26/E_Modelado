@@ -15,15 +15,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del código
 COPY . .
 
-# Verificar que el archivo de la aplicación existe y es ejecutable
+# Verificar que el archivo de la aplicación existe
 RUN test -f playground.py && echo "playground.py encontrado" || echo "ERROR: playground.py no encontrado"
-RUN chmod +x playground.py
 
-# Configurar el puerto para Cloud Run
-ENV PORT 8080
+ENV PORT 3000
 EXPOSE $PORT
 
 # Iniciar la aplicación
 CMD echo "Iniciando aplicación..." && \
+    echo "GROQ_API_KEY: ${GROQ_API_KEY}" && \
     echo "PORT: ${PORT}" && \
     exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 playground:app
