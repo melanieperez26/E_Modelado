@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.playground import Playground,serve_playground_app
+from agno.playground import Playground
 from agno.storage.sqlite import SqliteStorage
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
@@ -14,6 +14,9 @@ load_dotenv()
 
 # Configurar el directorio temporal
 os.makedirs('tmp', exist_ok=True)
+
+# Obtener el puerto desde las variables de entorno
+port = int(os.getenv('PORT', 8080))
 
 agent_storage = "tmp/agents.db"
 
@@ -41,9 +44,5 @@ finance_agent = Agent(
     markdown=True,
 )
 
+# Crear la aplicación
 app = Playground(agents=[web_agent, finance_agent]).get_app()
-
-if __name__ == "__main__":
-    # Para Cloud Run, usamos el puerto 3000
-    port = 3000
-    serve_playground_app("playground:app", reload=False, port=port)

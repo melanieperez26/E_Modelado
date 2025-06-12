@@ -15,12 +15,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del código
 COPY . .
 
-# Verificar que el archivo de la aplicación existe
+# Verificar que el archivo de la aplicación existe y es ejecutable
 RUN test -f playground.py && echo "playground.py encontrado" || echo "ERROR: playground.py no encontrado"
+RUN chmod +x playground.py
 
 # Configurar el puerto para Cloud Run
 ENV PORT 8080
 EXPOSE $PORT
+
+# Verificar que las variables de entorno necesarias están presentes
+RUN if [ -z "$GROQ_API_KEY" ]; then echo "ERROR: GROQ_API_KEY no está configurada"; exit 1; fi
 
 # Iniciar la aplicación
 CMD echo "Iniciando aplicación..." && \
