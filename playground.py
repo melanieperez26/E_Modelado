@@ -12,6 +12,10 @@ from agno.models.groq import Groq
 # Cargar variables de entorno
 load_dotenv()
 
+# Verificar la existencia de la variable de entorno GROQ_API_KEY
+if not os.getenv("GROQ_API_KEY"):
+    raise ValueError("ERROR: GROQ_API_KEY no está configurada. Por favor, configúrala en las variables de entorno de Cloud Run.")
+
 # Configurar el directorio temporal
 os.makedirs('tmp', exist_ok=True)
 
@@ -46,3 +50,10 @@ finance_agent = Agent(
 
 # Crear la aplicación
 app = Playground(agents=[web_agent, finance_agent]).get_app()
+
+if __name__ == "__main__":
+    print(f"Iniciando aplicación en el puerto {port}")
+    print(f"GROQ_API_KEY: {'******' if os.getenv('GROQ_API_KEY') else 'NO CONFIGURADA'}")
+    print("Para ejecutar localmente, usa:")
+    print("python -m uvicorn playground:app --reload --port 8000")
+    print("Para Cloud Run, usa Gunicorn como está configurado en el Dockerfile")
