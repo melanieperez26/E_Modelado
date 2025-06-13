@@ -11,4 +11,4 @@ beautifulsoup4==4.12.2
 pandas==2.1.4
 python-dateutil==2.8.2
 markdown==3.5.1
-agno==0.1.2
+agno==0.1.0
